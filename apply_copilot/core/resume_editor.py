@@ -1,6 +1,6 @@
 """docx-aware resume editor — preserves user's format, enforces ≤ MAX_RESUME_PAGES.
 
-Design principles (per Christina's hard requirements):
+Design principles:
 1. **Format preservation**: read user's .docx, edit IN-PLACE via python-docx.
    Don't replace their fonts, paragraph styles, headers, footers, dividers.
 2. **Only add, never delete** user's existing content.

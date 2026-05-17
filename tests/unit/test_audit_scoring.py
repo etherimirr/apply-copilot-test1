@@ -36,9 +36,9 @@ def test_addressable_excludes_no_fix():
 
 
 def test_addressable_floor_prevents_gaming():
-    """Bug Christina hit: 1 of 22 explicit, 21 marked no_fix → addressable
-    would round to 100%, but the score should reflect the raw 5% — the
-    floor kicks in when raw < 30 but pct > 80."""
+    """Coverage-gaming bug: 1 of 22 explicit, 21 marked no_fix → addressable
+    rounds to 100% but the score should reflect raw 5%. The floor kicks
+    in when raw < 30 but pct > 80."""
     cls = {
         "explicit": [{"keyword": "k0"}], "implicit": [],
         "missing": [{"keyword": f"k{i}", "no_fix": True} for i in range(1, 22)],

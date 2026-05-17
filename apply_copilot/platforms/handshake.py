@@ -613,7 +613,7 @@ async def process_one(page: Page, c: dict, profile: dict, employment_type: str,
     )
     cl_pdf = None
     if cl_text:
-        # Render CL as a simple PDF (reportlab) — preserves Christina's plain
+        # Render CL as a simple PDF (reportlab) — preserves the plain
         # style: Times New Roman 10pt, single page
         cl_pdf = GENERATED_DIR / f"{slug}_cover_letter.pdf"
         _render_cl_to_pdf(cl_text, cl_pdf, who=profile.get("fullName", ""))

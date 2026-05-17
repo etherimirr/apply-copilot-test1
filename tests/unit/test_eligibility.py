@@ -48,7 +48,8 @@ def test_no_false_positives(jd):
 
 
 def test_no_sponsorship_is_NOT_disqualifier():
-    """Christina explicitly opted out of 'no sponsorship' disqualifier so that
-    she can still apply and ask in interview. See feedback memory."""
+    """We intentionally do NOT disqualify on 'no sponsorship' so the user
+    can still apply and discuss it in interview. Many candidates qualify
+    via OPT/STEM-OPT and shouldn't be filtered out at pre-flight."""
     out = disqualifier("Unable to sponsor work visas at this time.")
     assert out == ""

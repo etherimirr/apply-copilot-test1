@@ -5,8 +5,7 @@
       "name": "dashboard",
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "apply_copilot", "--port", "8989"],
-      "port": 8989,
-      "cwd": "/Users/jyj/Desktop/apply-copilot-saas"
+      "port": 8989
     }
   ]
 }

@@ -12,7 +12,7 @@ SAMPLE_LOG = """# 投递日志
 ### ✅ 2026-05-12 — Instalily (Software Engineer, 2026)
 - **Source**: 公司官网 portal (portal.instalily.ai)
 - **URL**: https://portal.instalily.ai/jobs/software-engineer-2026
-- **Resume**: `Christina_Agent_v2.pdf` (Agent base) — base chosen correctly
+- **Resume**: `Applicant_Agent_v2.pdf` (Agent base) — base chosen correctly
 - **Status**: submitted
 - **Notes**: NYC FT, sponsorship pending
 ---
@@ -20,7 +20,7 @@ SAMPLE_LOG = """# 投递日志
 ### 🔌 2026-05-10 — Acme Corp (ML Engineer Intern)
 - **Source**: Handshake
 - **URL**: https://app.joinhandshake.com/jobs/12345
-- **Resume**: `Christina_MLE.pdf` (mle base)
+- **Resume**: `Applicant_MLE.pdf` (mle base)
 - **Status**: external pending
 ---
 
@@ -58,9 +58,9 @@ def test_parse_log_status_normalized():
 
 def test_parse_log_resume_filename_and_direction():
     blocks = parse_log(SAMPLE_LOG)
-    assert blocks[0]["resume_filename"] == "Christina_Agent_v2.pdf"
+    assert blocks[0]["resume_filename"] == "Applicant_Agent_v2.pdf"
     assert blocks[0]["direction"] == "agent"
-    assert blocks[1]["resume_filename"] == "Christina_MLE.pdf"
+    assert blocks[1]["resume_filename"] == "Applicant_MLE.pdf"
     assert blocks[1]["direction"] == "mle"
 
 

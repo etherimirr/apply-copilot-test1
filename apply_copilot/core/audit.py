@@ -93,10 +93,10 @@ def _compute_addressable_coverage(cls_result: dict, keywords: list[dict]) -> int
     no_fix = sum(1 for m in cls_result.get("missing", []) if m.get("no_fix"))
     addressable = max(1, len(keywords) - no_fix)
     covered = len(cls_result.get("explicit", [])) + len(cls_result.get("implicit", []))
-    # Safety: a single match counted as addressable=1 will return 100% trivially
-    # — Christina hit this bug at low explicit coverage with high "no_fix". Add
-    # a coverage_pct floor of 30% to prevent that, mirroring the bug fix from
-    # the local autopilot.
+    # Safety floor: when a single match becomes addressable=1, the result
+    # trivially rounds to 100% even with terrible real coverage. If raw
+    # coverage is <30% but addressable >80%, the LLM marked too many
+    # keywords as no_fix; trust the raw number.
     pct = round(100 * covered / addressable)
     raw_pct = _compute_raw_coverage(cls_result, keywords)
     if raw_pct < 30 and pct > 80:

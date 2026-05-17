@@ -14,18 +14,18 @@ def test_get_returns_empty_profile_initially(client):
 
 def test_put_then_get_persists(client):
     payload = {
-        "first_name": "Christina", "last_name": "Jia",
-        "email": "test@example.com", "school": "Columbia University",
-        "school_gpa": "4.0", "work_auth_us": "Yes",
+        "first_name": "Alex", "last_name": "Doe",
+        "email": "test@example.com", "school": "Test University",
+        "school_gpa": "3.9", "work_auth_us": "Yes",
     }
     r = client.put("/api/profile", json=payload)
     assert r.status_code == 200
 
     # Re-fetch and confirm
     r2 = client.get("/api/profile").json()
-    assert r2["first_name"] == "Christina"
+    assert r2["first_name"] == "Alex"
     assert r2["email"] == "test@example.com"
-    assert r2["school"] == "Columbia University"
+    assert r2["school"] == "Test University"
     assert r2["work_auth_us"] == "Yes"
 
 
