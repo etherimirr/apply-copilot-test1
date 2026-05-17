@@ -1,0 +1,19 @@
+# Core
+fastapi>=0.115
+uvicorn[standard]>=0.30
+playwright>=1.48
+openai>=1.50
+pydantic>=2.0
+
+# Documents
+python-docx>=1.1
+pdfminer.six>=20240706
+pypdf>=4.0
+reportlab>=4.0
+
+# Storage
+sqlalchemy>=2.0
+
+# Misc
+python-multipart>=0.0.9
+aiofiles>=23.0

@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Apply Copilot</title>
+  <link rel="stylesheet" href="/static/css/app.css" />
+</head>
+<body>
+
+<nav id="nav">
+  <h1>Apply Copilot</h1>
+  <button data-tab="profile" class="active">👤 Profile</button>
+  <button data-tab="resumes">📄 Resumes</button>
+  <button data-tab="autopilot">🚀 Autopilot</button>
+  <button data-tab="apps">📋 Applications</button>
+  <button data-tab="kb">🧠 Project KB</button>
+  <span id="diag"></span>
+</nav>
+
+<main>
+
+  <!-- ─────── PROFILE TAB ─────── -->
+  <section id="tab-profile" class="tab active">
+    <h2>Your profile</h2>
+    <p class="hint">Filled into every application. Saved locally to your computer.</p>
+
+    <form id="profile-form">
+      <fieldset>
+        <legend>Identity</legend>
+        <label>First name <input name="first_name" /></label>
+        <label>Last name <input name="last_name" /></label>
+        <label>Preferred name <input name="preferred_name" /></label>
+        <label>Pronouns <input name="pronouns" placeholder="She/Her" /></label>
+        <label>Email <input name="email" type="email" /></label>
+        <label>Phone <input name="phone" placeholder="(123) 456-7890" /></label>
+        <label>Phone country code <input name="phone_country_code" placeholder="+1" /></label>
+        <label>Birth date (YYYY-MM-DD) <input name="birth_date" /></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Address</legend>
+        <label class="full">Address line 1 <input name="address1" /></label>
+        <label class="full">Address line 2 <input name="address2" /></label>
+        <label>City <input name="city" /></label>
+        <label>State / region <input name="state" /></label>
+        <label>Postal code <input name="postal_code" /></label>
+        <label>Country <input name="country" /></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Online</legend>
+        <label class="full">LinkedIn URL <input name="linkedin" /></label>
+        <label class="full">GitHub URL <input name="github" /></label>
+        <label class="full">Portfolio / personal site <input name="portfolio" /></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Education (current)</legend>
+        <label class="full">School <input name="school" /></label>
+        <label>Degree <input name="school_degree" placeholder="Bachelor's / Master's / PhD" /></label>
+        <label>Major <input name="school_major" /></label>
+        <label>GPA <input name="school_gpa" /></label>
+        <label>Start date <input name="school_start_date" placeholder="YYYY-MM" /></label>
+        <label>End date <input name="school_end_date" placeholder="YYYY-MM" /></label>
+        <label class="full">Graduation date (display, e.g. "Dec 2026") <input name="graduation_date" /></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Work authorization</legend>
+        <label>Authorized to work in US?
+          <select name="work_auth_us">
+            <option>Yes</option><option>No</option>
+          </select>
+        </label>
+        <label>Need sponsorship?
+          <select name="need_sponsorship">
+            <option>No</option><option>Yes</option>
+          </select>
+        </label>
+        <label>Willing to relocate?
+          <select name="willing_to_relocate">
+            <option>Yes</option><option>No</option>
+          </select>
+        </label>
+        <label>Expected salary (annual USD) <input name="salary_expectation" /></label>
+        <label>Earliest start date <input name="available_start_date" placeholder="YYYY-MM-DD" /></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Demographics (optional — many forms require but you can pick "Decline")</legend>
+        <label>Gender
+          <select name="gender">
+            <option>Decline to answer</option><option>Female</option><option>Male</option>
+            <option>Non-binary</option><option>Other</option>
+          </select>
+        </label>
+        <label>Race
+          <select name="race">
+            <option>Decline to answer</option><option>Asian</option><option>Black or African American</option>
+            <option>Hispanic or Latino</option><option>Native American</option>
+            <option>Pacific Islander</option><option>White</option><option>Two or more races</option>
+          </select>
+        </label>
+        <label>Ethnicity
+          <select name="ethnicity">
+            <option>Decline to answer</option><option>Hispanic or Latino</option>
+            <option>Not Hispanic or Latino</option>
+          </select>
+        </label>
+        <label>Veteran status
+          <select name="veteran"><option>No</option><option>Yes</option><option>Decline to answer</option></select>
+        </label>
+        <label>Disability
+          <select name="disability"><option>No</option><option>Yes</option><option>Decline to answer</option></select>
+        </label>
+        <label>LGBTQ+
+          <select name="lgbtq"><option>Decline to answer</option><option>Yes</option><option>No</option></select>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Profile blurb</legend>
+        <label class="full">Years of experience <input name="years_of_experience" /></label>
+        <label class="full">One-line summary (used for "tell us about yourself" fields)
+          <textarea name="summary" rows="3"></textarea>
+        </label>
+      </fieldset>
+
+      <button type="submit" class="primary">💾 Save profile</button>
+      <span id="profile-status"></span>
+    </form>
+  </section>
+
+  <!-- ─────── RESUMES TAB ─────── -->
+  <section id="tab-resumes" class="tab">
+    <h2>Your base resumes</h2>
+    <p class="hint">
+      Upload one or more <strong>.docx</strong> resumes. The autopilot edits a
+      <em>copy</em> for each job to add JD keywords, preserving your format and
+      keeping the page count ≤ 2. Your original is never modified.
+    </p>
+
+    <form id="resume-upload-form">
+      <label>Direction
+        <select name="direction">
+          <option value="mle">ML / Data</option>
+          <option value="agent">AI Agent / LLM Apps</option>
+          <option value="sde_general">SDE General</option>
+          <option value="sde_dl">SDE / Deep Learning Systems</option>
+          <option value="default">Default (catch-all)</option>
+        </select>
+      </label>
+      <label>Label (optional) <input name="label" placeholder="my ML resume v3" /></label>
+      <label>.docx file <input type="file" name="file" accept=".docx" required /></label>
+      <label><input type="checkbox" name="is_default" /> Make default</label>
+      <button type="submit" class="primary">Upload</button>
+    </form>
+
+    <h3>Uploaded resumes</h3>
+    <table id="resume-list">
+      <thead><tr><th>Direction</th><th>Label</th><th>File</th><th>Default</th><th>Uploaded</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- ─────── AUTOPILOT TAB ─────── -->
+  <section id="tab-autopilot" class="tab">
+    <h2>Autopilot</h2>
+    <p class="hint">
+      Opens a bundled browser, paginates jobs on the chosen platform, prepares
+      a tailored resume + cover letter per posting, and submits. Native applies
+      (e.g. Handshake) auto-submit; external-apply (Greenhouse/Lever/Workday)
+      can be filled and left open for you to review.
+    </p>
+
+    <form id="autopilot-form">
+      <label>Platform
+        <select name="platform"><option value="handshake">Handshake</option></select>
+      </label>
+      <label>Employment type
+        <select name="employment_type">
+          <option value="intern">🎓 Internship</option>
+          <option value="fulltime">💼 Full-time</option>
+          <option value="both">📂 Both</option>
+        </select>
+      </label>
+      <label>Sort
+        <select name="sort">
+          <option value="newest">Newest</option>
+          <option value="soonest_deadline">Soonest deadline</option>
+          <option value="most_relevant">Most relevant</option>
+        </select>
+      </label>
+      <label>Max jobs this run <input type="number" name="max_jobs" value="500" min="1" max="2000" /></label>
+      <label>External-apply behavior
+        <select name="external_mode">
+          <option value="skip">Skip (don't touch external sites)</option>
+          <option value="fill">Open tab + fill form (don't submit)</option>
+          <option value="fill-submit">⚠ Open + fill + Submit (dangerous!)</option>
+        </select>
+      </label>
+      <button type="submit" class="primary">▶ Start autopilot</button>
+      <button type="button" id="autopilot-stop">⏹ Stop</button>
+      <span id="autopilot-status"></span>
+    </form>
+
+    <h3>Live log</h3>
+    <pre id="autopilot-log"></pre>
+  </section>
+
+  <!-- ─────── APPLICATIONS TAB ─────── -->
+  <section id="tab-apps" class="tab">
+    <h2>Applications</h2>
+    <div class="filters">
+      <input id="apps-search" type="search" placeholder="Search company / title / URL..." />
+      <select id="apps-employment">
+        <option value="">All employment</option>
+        <option value="intern">🎓 Intern</option>
+        <option value="fulltime">💼 Full-time</option>
+      </select>
+      <select id="apps-status">
+        <option value="">All status</option>
+        <option value="submitted">✅ Submitted</option>
+        <option value="external_pending">🔌 External pending</option>
+        <option value="external_filled">📝 External filled (review)</option>
+        <option value="gate_fail">⛔ Gate failed (coverage)</option>
+        <option value="skipped_eligibility">⏭ Skipped (eligibility)</option>
+        <option value="picker_skip">⏭ Skipped (picker)</option>
+        <option value="withdrawn">↩ Withdrawn</option>
+      </select>
+    </div>
+    <table id="apps-list">
+      <thead><tr><th>✓</th><th>Status</th><th>Company / Title</th><th>Type</th><th>Direction</th><th>Coverage</th><th>Submitted</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- ─────── PROJECT KB TAB ─────── -->
+  <section id="tab-kb" class="tab">
+    <h2>Project knowledge base</h2>
+    <p class="hint">
+      Markdown blurbs for each of your projects. The autopilot uses these to
+      ground answers to open-ended application questions (e.g., "tell us
+      about a project you're proud of"). One project per entry. Keep
+      ≤ 1500 chars per project — anything longer gets truncated.
+    </p>
+
+    <form id="kb-form">
+      <fieldset>
+        <legend>Add or update a project</legend>
+        <label class="full">Project ID (lowercase, no spaces — e.g. <code>jnj_pipeline</code>)
+          <input name="project_id" required placeholder="my_project" />
+        </label>
+        <label class="full">Markdown content
+          <textarea name="content" rows="14"
+            placeholder="### Project name (Company, dates)
+- One-line summary of what you built
+- Tech stack: Python, PyTorch, FastAPI, ...
+- Outcome: 40% faster inference, deployed to 5 clusters, etc.
+- Why it matters: shipped to 40K users, won internal award, ..."></textarea>
+        </label>
+        <button class="primary" type="submit">💾 Save project</button>
+        <span id="kb-status"></span>
+      </fieldset>
+    </form>
+
+    <table id="kb-list">
+      <thead><tr><th>Project ID</th><th>Preview</th><th>Size</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+</main>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dashboard",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "apply_copilot", "--port", "8989"],
+      "port": 8989,
+      "cwd": "/Users/jyj/Desktop/apply-copilot-saas"
+    }
+  ]
+}
