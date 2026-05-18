@@ -188,6 +188,14 @@ The only data sent over the network is:
 No analytics. No telemetry. Delete the `~/.apply_copilot/` folder to nuke
 everything.
 
+## Resume format
+
+Apply Copilot's editor and translator expect a structured `.docx` with
+predictable section anchors (EDUCATION → INTERNSHIP → TECHNICAL SKILLS →
+PROJECT EXPERIENCES). See [`examples/templates/`](./examples/templates/) for
+a reference English resume + (optional) translated Chinese counterpart and a
+full description of the expected anchors / constraints.
+
 ## License
 
 [Choose: MIT? Apache 2.0? Or "Source Available — Personal Use Only"]
