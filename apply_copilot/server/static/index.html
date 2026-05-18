@@ -15,6 +15,7 @@
   <button data-tab="autopilot">🚀 Autopilot</button>
   <button data-tab="apps">📋 Applications</button>
   <button data-tab="kb">🧠 Project KB</button>
+  <button data-tab="editor">✍️ Resume Editor</button>
   <span id="diag"></span>
 </nav>
 
@@ -269,6 +270,76 @@
       <thead><tr><th>Project ID</th><th>Preview</th><th>Size</th><th></th></tr></thead>
       <tbody></tbody>
     </table>
+  </section>
+
+  <!-- ─────── RESUME EDITOR TAB ─────── -->
+  <section id="tab-editor" class="tab">
+    <h2>Resume editor</h2>
+    <p class="hint">
+      Pick an uploaded resume on the left. Translate it (English ↔ 中文)
+      preserving your format, or apply targeted skill/bullet edits with
+      automatic page-limit rollback. Every action saves as a NEW version —
+      your original is never overwritten.
+    </p>
+
+    <div id="editor-layout" style="display:flex; gap:24px;">
+      <!-- LEFT: resume list -->
+      <div style="flex:0 0 260px;">
+        <fieldset>
+          <legend>Your resumes</legend>
+          <ul id="editor-resume-list" style="list-style:none; padding:0; margin:0; max-height:520px; overflow-y:auto;"></ul>
+          <button type="button" id="editor-refresh">🔄 Refresh</button>
+        </fieldset>
+      </div>
+
+      <!-- RIGHT: actions + preview -->
+      <div style="flex:1; min-width:0;">
+        <fieldset>
+          <legend>Actions</legend>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="primary" id="editor-translate-zh">🌐 Translate → 中文</button>
+            <button type="button" class="primary" id="editor-translate-en">🌐 Translate → English</button>
+            <button type="button" id="editor-render">📄 Render PDF</button>
+            <button type="button" id="editor-download">⬇ Download .docx</button>
+          </div>
+          <p class="hint" style="margin-top:10px;">
+            Tip: translation auto-detects the source language and saves the result as
+            a new resume row (label suffixed with the target lang).
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Add skills / inject bullet keyword</legend>
+          <label class="full">Skills category (must exist in resume, e.g. "Programming Languages")
+            <input id="editor-skills-cat" placeholder="Programming Languages" />
+          </label>
+          <label class="full">Keywords to add (comma-separated)
+            <input id="editor-skills-kw" placeholder="Go, Rust, Kotlin" />
+          </label>
+          <button type="button" id="editor-skills-apply">➕ Apply skills_add</button>
+          <hr style="margin:14px 0; border:none; border-top:1px solid var(--border);" />
+          <label class="full">Anchor (start of an existing bullet)
+            <input id="editor-anchor" placeholder="Built a recommendation" />
+          </label>
+          <label class="full">Phrase to append (bolded)
+            <input id="editor-addition" placeholder="Used FAISS for ANN search." />
+          </label>
+          <button type="button" id="editor-bullet-apply">✏ Apply bullet_inject</button>
+          <p class="hint" style="margin-top:10px;">
+            Page-limit enforcement is ON — if the edit pushes you past
+            {MAX_RESUME_PAGES} pages, it auto-reverts.
+          </p>
+          <span id="editor-action-status"></span>
+        </fieldset>
+
+        <fieldset>
+          <legend>Preview <span id="editor-preview-lang" class="hint"></span></legend>
+          <div id="editor-preview" style="background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:14px; max-height:420px; overflow-y:auto; font-size:13px; line-height:1.6;">
+            <span class="hint">Pick a resume from the left to preview.</span>
+          </div>
+        </fieldset>
+      </div>
+    </div>
   </section>
 
 </main>
