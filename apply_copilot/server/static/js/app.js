@@ -12,6 +12,7 @@ function showTab(name) {
   if (name === 'apps') loadApplications();
   if (name === 'autopilot') refreshAutopilotStatus();
   if (name === 'kb') loadProjectKB();
+  if (name === 'editor') loadEditorList();
 }
 $$('nav button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
 
@@ -232,6 +233,123 @@ $('#kb-form').onsubmit = async (e) => {
     loadProjectKB();
   }
 };
+
+// ─── Resume Editor ─────────────────────────────────────────────────────────
+
+let _editorActiveId = null;
+
+async function loadEditorList() {
+  const items = await fetch('/api/resumes').then(r => r.json());
+  const ul = $('#editor-resume-list');
+  if (!items.length) {
+    ul.innerHTML = '<li class="hint" style="padding:8px;">No resumes uploaded yet — use the Resumes tab.</li>';
+    return;
+  }
+  ul.innerHTML = items.map(r => `
+    <li style="padding:8px; border-bottom:1px solid var(--border); cursor:pointer; ${_editorActiveId === r.id ? 'background:#dbeafe;' : ''}"
+        onclick="selectEditorResume(${r.id})">
+      <strong>${esc(r.label)}</strong>
+      <div class="hint" style="font-size:11px;">${esc(r.direction)} · ${esc(r.filename.slice(0, 30))}${r.filename.length > 30 ? '…' : ''}</div>
+    </li>
+  `).join('');
+}
+
+async function selectEditorResume(id) {
+  _editorActiveId = id;
+  loadEditorList();
+  $('#editor-preview').innerHTML = '<span class="hint">Loading preview…</span>';
+  $('#editor-preview-lang').textContent = '';
+  try {
+    const d = await fetch(`/api/resumes/${id}/preview`).then(r => r.json());
+    if (!d.paragraphs) {
+      $('#editor-preview').innerHTML = '<span class="hint">No content parsed.</span>';
+      return;
+    }
+    $('#editor-preview-lang').textContent = `(detected: ${d.language})`;
+    $('#editor-preview').innerHTML = d.paragraphs.map(p => {
+      const tag = p.is_bullet ? `<div style="padding-left:16px;">• ${esc(p.text)}</div>`
+                              : (/heading/i.test(p.style)
+                                  ? `<h4 style="margin:8px 0 4px;">${esc(p.text)}</h4>`
+                                  : `<p style="margin:4px 0;${p.bold ? 'font-weight:600;' : ''}">${esc(p.text)}</p>`);
+      return tag;
+    }).join('');
+  } catch (e) {
+    $('#editor-preview').innerHTML = `<span class="hint">Preview failed: ${esc(String(e))}</span>`;
+  }
+}
+window.selectEditorResume = selectEditorResume;
+
+async function _editorTranslate(lang) {
+  if (!_editorActiveId) { alert('Pick a resume first.'); return; }
+  setEditorStatus('Translating…');
+  const r = await fetch(`/api/resumes/${_editorActiveId}/translate`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({target_lang: lang}),
+  });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { setEditorStatus('✗ ' + (j.detail || 'translate failed')); return; }
+  setEditorStatus(`✓ saved as id=${j.id} (${j.summary.translated}/${j.summary.total_paragraphs} paragraphs)`);
+  loadEditorList();
+  _editorActiveId = j.id;
+  await selectEditorResume(j.id);
+}
+
+$('#editor-translate-zh').onclick = () => _editorTranslate('zh');
+$('#editor-translate-en').onclick = () => _editorTranslate('en');
+
+$('#editor-refresh').onclick = loadEditorList;
+
+$('#editor-download').onclick = () => {
+  if (!_editorActiveId) { alert('Pick a resume first.'); return; }
+  window.location = `/api/resumes/${_editorActiveId}/download`;
+};
+
+$('#editor-render').onclick = () => {
+  if (!_editorActiveId) { alert('Pick a resume first.'); return; }
+  window.open(`/api/resumes/${_editorActiveId}/render`, '_blank');
+};
+
+$('#editor-skills-apply').onclick = async () => {
+  if (!_editorActiveId) { alert('Pick a resume first.'); return; }
+  const cat = $('#editor-skills-cat').value.trim();
+  const kw = $('#editor-skills-kw').value.split(',').map(s => s.trim()).filter(Boolean);
+  if (!cat || !kw.length) { alert('Need both category and at least one keyword.'); return; }
+  await _editorApplyEdits([{type: 'skills_add', category: cat, keywords: kw}]);
+};
+
+$('#editor-bullet-apply').onclick = async () => {
+  if (!_editorActiveId) { alert('Pick a resume first.'); return; }
+  const anchor = $('#editor-anchor').value.trim();
+  const add = $('#editor-addition').value.trim();
+  if (!anchor || !add) { alert('Need both anchor and phrase.'); return; }
+  await _editorApplyEdits([{type: 'bullet_inject', anchor: anchor, addition: add}]);
+};
+
+async function _editorApplyEdits(edits) {
+  setEditorStatus('Applying…');
+  const r = await fetch(`/api/resumes/${_editorActiveId}/edit`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({edits, enforce_page_limit: true}),
+  });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { setEditorStatus('✗ ' + (j.detail || 'edit failed')); return; }
+  const ed = j.edits || {};
+  setEditorStatus(`✓ saved id=${j.id} · applied ${ed.applied?.length ?? 0}, skipped ${ed.skipped?.length ?? 0}`);
+  loadEditorList();
+  _editorActiveId = j.id;
+  await selectEditorResume(j.id);
+}
+
+function setEditorStatus(msg) {
+  $('#editor-action-status').textContent = msg;
+  setTimeout(() => {
+    if ($('#editor-action-status').textContent === msg) {
+      $('#editor-action-status').textContent = '';
+    }
+  }, 6000);
+}
 
 // ─── Util ───────────────────────────────────────────────────────────────
 

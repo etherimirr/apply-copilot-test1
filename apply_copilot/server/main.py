@@ -14,7 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
-from .routes import profile, resumes, autopilot, applications, settings, project_kb
+from .routes import profile, resumes, autopilot, applications, settings, project_kb, resume_editor
 
 app = FastAPI(title="Apply Copilot")
 
@@ -35,6 +35,7 @@ app.include_router(autopilot.router, prefix="/api/autopilot")
 app.include_router(applications.router, prefix="/api/applications")
 app.include_router(settings.router, prefix="/api/settings")
 app.include_router(project_kb.router, prefix="/api/project-kb")
+app.include_router(resume_editor.router, prefix="/api/resumes")
 
 
 @app.get("/")

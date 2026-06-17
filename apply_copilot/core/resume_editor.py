@@ -29,7 +29,9 @@ def load_docx(path: Path):
     return Document(str(path))
 
 
-def save_docx(doc, path: Path):
+def save_docx(doc, path):
+    """Accept str or Path. Creates parent dirs if missing."""
+    path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     doc.save(str(path))
 
